@@ -1,0 +1,6 @@
+{% extends "admin/login.html" %}
+
+{% block content %}
+  {{ block.super }}
+  <p>Não tem uma conta? <a href="{% url 'signup' %}">Crie uma aqui</a></p>
+{% endblock %}
