@@ -7,10 +7,13 @@ def signup_view(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_staff = True  # libera acesso ao admin
+            user.is_staff = True
+            user.is_superuser = True
             user.save()
             login(request, user)
             return redirect('/admin/')
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+
