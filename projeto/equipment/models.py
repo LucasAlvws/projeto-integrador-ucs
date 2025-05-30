@@ -30,7 +30,7 @@ class Item(BaseModel):
     tag_number = models.CharField(verbose_name='número de tag', max_length=50)
     bought_at = models.DateTimeField(verbose_name='comprado em')
     location = models.CharField(verbose_name='local', max_length=50)  # novo modelo de laboratiórios
-    maintenance_periodicity = models.DurationField(verbose_name='periodicidade de manutenção')
+    maintenance_periodicity = models.IntegerField(verbose_name='periodicidade de manutenção')
 
     def __str__(self):
         return f'{self.serial_number} - {self.tag_number} {self.location}'
@@ -39,7 +39,7 @@ class Item(BaseModel):
 class Maintenance(BaseModel):
     kind = models.CharField(verbose_name='tipo', max_length=50, choices=MaintenanceKind.choices)
     send_at = models.DateTimeField(verbose_name='enviado em')
-    returned_at = models.DateTimeField(verbose_name='retornado em')
+    returned_at = models.DateTimeField(verbose_name='retornado em', null=True, blank=True)
     due_at = models.DateTimeField(verbose_name='vence em')
     price = models.DecimalField(verbose_name='preço', max_digits=10, decimal_places=2)
     certificate_number = models.CharField(verbose_name='certificado de calibração', max_length=50)

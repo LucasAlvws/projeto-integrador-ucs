@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 from projeto.equipment.models import Asset, Item, Maintenance
 
 # Register your models here.
@@ -14,6 +15,12 @@ class ItemRecordAdmin(admin.ModelAdmin):
     list_display = ('serial_number', 'tag_number', 'bought_at', 'location', 'maintenance_periodicity')
     list_filter = ('bought_at', 'location', 'maintenance_periodicity')
     search_fields = ('serial_number', 'tag_number')
+    widgets = {
+    'maintenance_periodicity': forms.TextInput(attrs={
+        'placeholder': 'Ex: 30 days, 1 day 2:00:00',
+        'style': 'width: 200px;',
+    }),
+}
 
 @admin.register(Maintenance)
 class MaintenanceRecordAdmin(admin.ModelAdmin):
