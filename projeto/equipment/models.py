@@ -23,6 +23,9 @@ class Asset(BaseModel):
 
     def __str__(self):
         return f'{self.brand} {self.model} - ({self.kind})'
+    class Meta:
+        verbose_name = 'Equipamento'
+        verbose_name_plural = 'Equipamentos'
 
 
 class Item(BaseModel):
@@ -31,9 +34,15 @@ class Item(BaseModel):
     bought_at = models.DateTimeField(verbose_name='comprado em')
     location = models.CharField(verbose_name='local', max_length=50)  # novo modelo de laboratiórios
     maintenance_periodicity = models.IntegerField(verbose_name='periodicidade de manutenção')
+    archived = models.BooleanField(verbose_name='arquivado', default=False)
+    asset = models.ForeignKey(Asset, verbose_name='equipamento', on_delete=models.PROTECT)
 
     def __str__(self):
         return f'{self.serial_number} - {self.tag_number} {self.location}'
+    class Meta:
+        verbose_name = 'Item'
+        verbose_name_plural = 'Itens'
+
 
 
 class Maintenance(BaseModel):
@@ -53,3 +62,7 @@ class Maintenance(BaseModel):
 
     def __str__(self):
         return f'{self.item} {self.kind} {self.pk}'
+
+    class Meta:
+        verbose_name = 'Manutenção'
+        verbose_name_plural = 'Manutenções'

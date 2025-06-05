@@ -27,3 +27,9 @@ class MaintenanceRecordAdmin(admin.ModelAdmin):
     list_display = ('kind', 'item', 'send_at', 'returned_at', 'due_at', 'price', 'certificate_number')
     list_filter = ('kind', 'send_at', 'returned_at', 'due_at',)
     search_fields = ('certificate_number', 'certificate_results', 'observation')
+
+    def get_queryset(self, request):
+        return super().get_queryset(request)
+
+    def has_delete_permission(self, request, obj=None) -> bool:
+        return request.user.is_superuser
