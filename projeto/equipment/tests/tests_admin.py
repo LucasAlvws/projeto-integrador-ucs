@@ -1,14 +1,14 @@
 from django.test import TestCase
 from django.contrib import admin
-from projeto.equipment.models import Asset, Item, Maintenance
-from projeto.equipment.admin import AssetRecordAdmin, ItemRecordAdmin, MaintenanceRecordAdmin
+from projeto.equipment.models import Asset, Item, Event
+from projeto.equipment.admin import AssetRecordAdmin, ItemRecordAdmin, EventRecordAdmin
 
 
 class AdminRegistrationTest(TestCase):
     def test_models_are_registered(self):
         self.assertIn(Asset, admin.site._registry)
         self.assertIn(Item, admin.site._registry)
-        self.assertIn(Maintenance, admin.site._registry)
+        self.assertIn(Event, admin.site._registry)
 
 
 class AssetAdminTest(TestCase):
@@ -57,9 +57,9 @@ class ItemAdminTest(TestCase):
         )
 
 
-class MaintenanceAdminTest(TestCase):
+class EventAdminTest(TestCase):
     def setUp(self):
-        self.model_admin = MaintenanceRecordAdmin(Maintenance, admin.site)
+        self.model_admin = EventRecordAdmin(Event, admin.site)
 
     def test_list_display(self):
         self.assertEqual(

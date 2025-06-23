@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from projeto.equipment.models import Asset, Item, Maintenance
+from projeto.equipment.models import Asset, Item, Event
 
 # Register your models here.
 
@@ -22,8 +22,8 @@ class ItemRecordAdmin(admin.ModelAdmin):
     }),
 }
 
-@admin.register(Maintenance)
-class MaintenanceRecordAdmin(admin.ModelAdmin):
+@admin.register(Event)
+class EventRecordAdmin(admin.ModelAdmin):
     list_display = ('kind', 'item', 'send_at', 'returned_at', 'due_at', 'price', 'certificate_number')
     list_filter = ('kind', 'send_at', 'returned_at', 'due_at',)
     search_fields = ('certificate_number', 'certificate_results', 'observation')

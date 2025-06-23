@@ -1,5 +1,7 @@
 import uuid
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+
 
 class BaseModel(models.Model):
     """
@@ -11,3 +13,6 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+class CustomUser(AbstractUser):
+    laboratory = models.CharField(verbose_name='laboratorio', max_length=255)

@@ -4,7 +4,7 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.test import TestCase
 from django.utils import timezone
 
-from projeto.equipment.models import Asset, Item, Maintenance
+from projeto.equipment.models import Asset, Item, Event
 
 
 class AssetModelTest(TestCase):
@@ -41,7 +41,7 @@ class ItemModelTest(TestCase):
         self.assertEqual(str(item), f'{item.serial_number} - {item.tag_number} {item.location}')
 
 
-class MaintenanceModelTest(TestCase):
+class EventModelTest(TestCase):
     def setUp(self):
         self.item = Item.objects.create(
             serial_number='SN456',
@@ -52,12 +52,12 @@ class MaintenanceModelTest(TestCase):
         )
 
     def test_field_count(self):
-        field_names = [f.name for f in Maintenance._meta.fields if f.name != 'id']
+        field_names = [f.name for f in Event._meta.fields if f.name != 'id']
         # kind, send_at, returned_at, due_at, price, certificate_number, certificate_results, observation, item + created_at, updated_at, uuid
         self.assertEqual(len(field_names), 12)
 
     def test_create_and_str(self):
-        maintenance = Maintenance.objects.create(
+        event = Event.objects.create(
             kind='calibration',
             send_at=timezone.now(),
             returned_at=timezone.now(),
@@ -68,11 +68,11 @@ class MaintenanceModelTest(TestCase):
             observation='Nenhuma',
             item=self.item
         )
-        self.assertEqual(Maintenance.objects.count(), 1)
-        self.assertEqual(str(maintenance), f'{self.item} calibration {maintenance.pk}')
+        self.assertEqual(Event.objects.count(), 1)
+        self.assertEqual(str(event), f'{self.item} calibration {event.pk}')
 
     def test_delete_raises_permission_denied(self):
-        maintenance = Maintenance.objects.create(
+        event = Event.objects.create(
             kind='preventive',
             send_at=timezone.now(),
             returned_at=timezone.now(),
@@ -84,10 +84,10 @@ class MaintenanceModelTest(TestCase):
             item=self.item
         )
         with self.assertRaises(PermissionDenied):
-            maintenance.delete()
+            event.delete()
 
     def test_invalid_kind_choice_raises_validation_error(self):
-        maintenance = Maintenance(
+        event = Event(
             kind='not_valid',
             send_at=timezone.now(),
             returned_at=timezone.now(),
@@ -99,4 +99,4 @@ class MaintenanceModelTest(TestCase):
             item=self.item
         )
         with self.assertRaises(ValidationError):
-            maintenance.full_clean()
+            event.full_clean()
