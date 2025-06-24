@@ -1,14 +1,32 @@
 from django.test import TestCase
 from django.contrib import admin
-from projeto.equipment.models import Asset, Item, Event
-from projeto.equipment.admin import AssetRecordAdmin, ItemRecordAdmin, EventRecordAdmin
+from projeto.equipment.models import Asset, Equipment, Event, Laboratory
+from projeto.equipment.admin import AssetRecordAdmin, EquipmentRecordAdmin, EventRecordAdmin, LaboratoryRecordAdmin
 
 
 class AdminRegistrationTest(TestCase):
     def test_models_are_registered(self):
         self.assertIn(Asset, admin.site._registry)
-        self.assertIn(Item, admin.site._registry)
+        self.assertIn(Equipment, admin.site._registry)
         self.assertIn(Event, admin.site._registry)
+        self.assertIn(Laboratory, admin.site._registry)
+
+
+class LaboratoryAdminTest(TestCase):
+    def setUp(self):
+        self.model_admin = LaboratoryRecordAdmin(Laboratory, admin.site)
+
+    def test_list_display(self):
+        self.assertEqual(
+            self.model_admin.list_display,
+            ('name',)
+        )
+
+    def test_search_fields(self):
+        self.assertEqual(
+            self.model_admin.search_fields,
+            ('name',)
+        )
 
 
 class AssetAdminTest(TestCase):
@@ -34,20 +52,20 @@ class AssetAdminTest(TestCase):
         )
 
 
-class ItemAdminTest(TestCase):
+class EquipmentAdminTest(TestCase):
     def setUp(self):
-        self.model_admin = ItemRecordAdmin(Item, admin.site)
+        self.model_admin = EquipmentRecordAdmin(Equipment, admin.site)
 
     def test_list_display(self):
         self.assertEqual(
             self.model_admin.list_display,
-            ('serial_number', 'tag_number', 'bought_at', 'location', 'maintenance_periodicity')
+            ('serial_number', 'tag_number', 'bought_at', 'laboratory', 'maintenance_periodicity')
         )
 
     def test_list_filter(self):
         self.assertEqual(
             self.model_admin.list_filter,
-            ('bought_at', 'location', 'maintenance_periodicity')
+            ('bought_at', 'laboratory', 'maintenance_periodicity')
         )
 
     def test_search_fields(self):

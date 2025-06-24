@@ -4,7 +4,18 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.test import TestCase
 from django.utils import timezone
 
-from projeto.equipment.models import Asset, Item, Event
+from projeto.equipment.models import Asset, Equipment, Event, Laboratory
+
+
+class LaboratoryModelTest(TestCase):
+    def test_field_count(self):
+        field_names = [f.name for f in Laboratory._meta.fields if f.name != 'id']
+        self.assertEqual(len(field_names), 4)  # name, created_at, updated_at, uuid
+
+    def test_create_and_str(self):
+        laboratory = Laboratory.objects.create(name='Lab A')
+        self.assertEqual(Laboratory.objects.count(), 1)
+        self.assertEqual(str(laboratory), 'Lab A')
 
 
 class AssetModelTest(TestCase):
@@ -23,32 +34,40 @@ class AssetModelTest(TestCase):
             asset.full_clean()
 
 
-class ItemModelTest(TestCase):
+class EquipmentModelTest(TestCase):
     def test_field_count(self):
-        field_names = [f.name for f in Item._meta.fields if f.name != 'id']
-        # serial_number, tag_number, bought_at, location, maintenance_periodicity + created_at, updated_at, uuid
-        self.assertEqual(len(field_names), 8)
+        field_names = [f.name for f in Equipment._meta.fields if f.name != 'id']
+        # serial_number, tag_number, bought_at, laboratory, maintenance_periodicity, calibration_periodicity, archived, asset + created_at, updated_at, uuid
+        self.assertEqual(len(field_names), 11)
 
     def test_create_and_str(self):
-        item = Item.objects.create(
+        laboratory = Laboratory.objects.create(name='Lab A')
+        asset = Asset.objects.create(brand='HP', model='X200', kind='analog')
+        equipment = Equipment.objects.create(
             serial_number='SN123',
             tag_number='TAG999',
             bought_at=timezone.now(),
-            location='Lab A',
-            maintenance_periodicity=timedelta(days=180)
+            laboratory=laboratory,
+            maintenance_periodicity=180,
+            calibration_periodicity=365,
+            asset=asset
         )
-        self.assertEqual(Item.objects.count(), 1)
-        self.assertEqual(str(item), f'{item.serial_number} - {item.tag_number} {item.location}')
+        self.assertEqual(Equipment.objects.count(), 1)
+        self.assertEqual(str(equipment), f'{equipment.serial_number} - {equipment.tag_number} {equipment.laboratory}')
 
 
 class EventModelTest(TestCase):
     def setUp(self):
-        self.item = Item.objects.create(
+        self.laboratory = Laboratory.objects.create(name='Lab B')
+        self.asset = Asset.objects.create(brand='HP', model='X200', kind='analog')
+        self.equipment = Equipment.objects.create(
             serial_number='SN456',
             tag_number='TAG123',
             bought_at=timezone.now(),
-            location='Lab B',
-            maintenance_periodicity=timedelta(days=90)
+            laboratory=self.laboratory,
+            maintenance_periodicity=90,
+            calibration_periodicity=365,
+            asset=self.asset
         )
 
     def test_field_count(self):
@@ -66,10 +85,10 @@ class EventModelTest(TestCase):
             certificate_number='CERT1234',
             certificate_results='0-10V, 5 pontos',
             observation='Nenhuma',
-            item=self.item
+            item=self.equipment
         )
         self.assertEqual(Event.objects.count(), 1)
-        self.assertEqual(str(event), f'{self.item} calibration {event.pk}')
+        self.assertEqual(str(event), f'{self.equipment} calibration {event.pk}')
 
     def test_delete_raises_permission_denied(self):
         event = Event.objects.create(
@@ -81,7 +100,7 @@ class EventModelTest(TestCase):
             certificate_number='CERT0001',
             certificate_results='OK',
             observation='Verificado',
-            item=self.item
+            item=self.equipment
         )
         with self.assertRaises(PermissionDenied):
             event.delete()
@@ -96,7 +115,7 @@ class EventModelTest(TestCase):
             certificate_number='ABC123',
             certificate_results='Ponto A',
             observation='Teste',
-            item=self.item
+            item=self.equipment
         )
         with self.assertRaises(ValidationError):
             event.full_clean()
