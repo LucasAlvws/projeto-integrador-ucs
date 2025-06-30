@@ -10,7 +10,7 @@ from projeto.equipment.models import Asset, Equipment, Event, Laboratory
 class LaboratoryModelTest(TestCase):
     def test_field_count(self):
         field_names = [f.name for f in Laboratory._meta.fields if f.name != 'id']
-        self.assertEqual(len(field_names), 4)  # name, created_at, updated_at, uuid
+        self.assertEqual(len(field_names), 4)
 
     def test_create_and_str(self):
         laboratory = Laboratory.objects.create(name='Lab A')
@@ -21,7 +21,7 @@ class LaboratoryModelTest(TestCase):
 class AssetModelTest(TestCase):
     def test_field_count(self):
         field_names = [f.name for f in Asset._meta.fields if f.name != 'id']
-        self.assertEqual(len(field_names), 6)  # brand, model, kind, created_at, updated_at, uuid
+        self.assertEqual(len(field_names), 6)
 
     def test_create_and_str(self):
         asset = Asset.objects.create(brand='HP', model='X200', kind='analog')
@@ -37,7 +37,6 @@ class AssetModelTest(TestCase):
 class EquipmentModelTest(TestCase):
     def test_field_count(self):
         field_names = [f.name for f in Equipment._meta.fields if f.name != 'id']
-        # serial_number, tag_number, bought_at, laboratory, maintenance_periodicity, calibration_periodicity, archived, asset + created_at, updated_at, uuid
         self.assertEqual(len(field_names), 11)
 
     def test_create_and_str(self):
@@ -72,7 +71,6 @@ class EventModelTest(TestCase):
 
     def test_field_count(self):
         field_names = [f.name for f in Event._meta.fields if f.name != 'id']
-        # kind, send_at, returned_at, due_at, price, certificate_number, certificate_results, observation, item + created_at, updated_at, uuid
         self.assertEqual(len(field_names), 12)
 
     def test_create_and_str(self):

@@ -83,26 +83,19 @@ class Equipment(BaseModel):
         if self.archived:
             return EquipmentStatus.UNAVAILABLE
         
-        # Get the latest event of any kind
         latest_event = self.events.order_by('-returned_at').first()
         
         if not latest_event:
-            # No events found - equipment is unavailable
             return EquipmentStatus.UNAVAILABLE
         
-        # If the latest event hasn't been returned yet, equipment is unavailable
         if not latest_event.returned_at:
             return EquipmentStatus.UNAVAILABLE
         
-        # Check if the latest event is a maintenance event
         if latest_event.kind in [EventKind.PREVENTIVE, EventKind.CORRECTIVE]:
-            # Equipment is unavailable until next calibration after maintenance
             return EquipmentStatus.UNAVAILABLE
 
-        # Latest event is calibration, check if it's overdue
         calibration_due_date = latest_event.returned_at + timedelta(days=self.calibration_periodicity)
 
-        # Check if calibration is overdue
         if timezone.now() > calibration_due_date:
             return EquipmentStatus.UNAVAILABLE
         
