@@ -33,7 +33,7 @@ class EquipmentRecordAdmin(admin.ModelAdmin):
 
     def full_description(self, obj):
         return obj.full_description
-    full_description.short_description = _("Descrição completa")
+    full_description.short_description = _("Full description")
 
     def get_urls(self):
         urls = super().get_urls()
