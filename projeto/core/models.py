@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
 
 
 class BaseModel(models.Model):
@@ -15,4 +16,10 @@ class BaseModel(models.Model):
         abstract = True
 
 class CustomUser(AbstractUser):
-    laboratory = models.CharField(verbose_name='laboratorio', max_length=255)
+    laboratory = models.ForeignKey(
+        'equipment.Laboratory', 
+        verbose_name=_('laboratory'), 
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
+    )
