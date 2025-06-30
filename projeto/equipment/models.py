@@ -151,3 +151,15 @@ class Event(BaseModel):
     class Meta:
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
+
+
+class ExpiringEquipment(Equipment):
+    """Proxy model for equipment with expiring calibration"""
+    
+    objects = Equipment.objects
+    
+    class Meta:
+        proxy = True
+        verbose_name = _("Expiring Equipment")
+        verbose_name_plural = _("Expiring Equipment")
+        app_label = 'equipment'
