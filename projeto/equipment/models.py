@@ -41,6 +41,7 @@ class Asset(BaseModel):
     kind = models.CharField(
         verbose_name=_("type"), max_length=50, choices=AssetKind.choices
     )
+    description = models.TextField(verbose_name=_("description"), blank=True, default='')
 
     def __str__(self):
         return f"{self.brand} {self.model} - ({self.kind})"
@@ -53,6 +54,8 @@ class Asset(BaseModel):
 class Equipment(BaseModel):
     serial_number = models.CharField(verbose_name=_("serial number"), max_length=50)
     tag_number = models.CharField(verbose_name=_("tag number"), max_length=50)
+    inventory_number = models.CharField(verbose_name=_("inventory number"), max_length=50)
+    
     bought_at = models.DateTimeField(verbose_name=_("bought at"))
     laboratory = models.ForeignKey(
         to=Laboratory, verbose_name=_("laboratory"), on_delete=models.PROTECT
@@ -67,6 +70,7 @@ class Equipment(BaseModel):
     asset = models.ForeignKey(
         to=Asset, verbose_name=_("equipment"), on_delete=models.PROTECT
     )
+    description = models.TextField(verbose_name=_("complementary description"), blank=True, default='')
 
     def __str__(self):
         return f"{self.serial_number} - {self.tag_number} {self.laboratory}"
@@ -79,30 +83,35 @@ class Equipment(BaseModel):
         if self.archived:
             return EquipmentStatus.UNAVAILABLE
         
-        # Get the latest event of any kind
         latest_event = self.events.order_by('-returned_at').first()
         
         if not latest_event:
-            # No events found - equipment is unavailable
             return EquipmentStatus.UNAVAILABLE
         
-        # If the latest event hasn't been returned yet, equipment is unavailable
         if not latest_event.returned_at:
             return EquipmentStatus.UNAVAILABLE
         
-        # Check if the latest event is a maintenance event
         if latest_event.kind in [EventKind.PREVENTIVE, EventKind.CORRECTIVE]:
-            # Equipment is unavailable until next calibration after maintenance
             return EquipmentStatus.UNAVAILABLE
 
-        # Latest event is calibration, check if it's overdue
         calibration_due_date = latest_event.returned_at + timedelta(days=self.calibration_periodicity)
 
-        # Check if calibration is overdue
         if timezone.now() > calibration_due_date:
             return EquipmentStatus.UNAVAILABLE
         
         return EquipmentStatus.AVAILABLE
+
+    @property
+    def full_description(self):
+        """
+        Returns the combined description from the asset and the equipment.
+        """
+        asset_desc = self.asset.description or ""
+        equipment_desc = self.description or ""
+        if asset_desc and equipment_desc:
+            return f"{asset_desc} — {equipment_desc}"
+        return asset_desc or equipment_desc
+
 
     @property
     def status(self):
@@ -128,7 +137,7 @@ class Event(BaseModel):
         verbose_name=_("returned at"), null=True, blank=True
     )
     due_at = models.DateTimeField(verbose_name=_("due at"))
-    price = models.DecimalField(verbose_name=_("price"), max_digits=10, decimal_places=2)
+    price = models.DecimalField(verbose_name=_("price"), max_digits=10, decimal_places=2, blank=True, null=True)
     certificate_number = models.CharField(
         verbose_name=_("calibration certificate"), max_length=50
     )

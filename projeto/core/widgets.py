@@ -14,7 +14,6 @@ class PeriodicityWidget(forms.MultiWidget):
 
     def decompress(self, value):
         if value:
-            # Convert days back to years, months, weeks, days
             days = int(value)
             years = days // 365
             remaining_days = days % 365
@@ -38,8 +37,6 @@ class PeriodicityWidget(forms.MultiWidget):
             for widget in self.widgets:
                 widget.is_localized = self.is_localized
         
-        # value is a list of values, each corresponding to a widget
-        # in self.widgets.
         if not isinstance(value, list):
             value = self.decompress(value)
         
@@ -59,7 +56,6 @@ class PeriodicityWidget(forms.MultiWidget):
             widget_name = '%s_%s' % (name, i)
             rendered = widget.render(widget_name, widget_value, final_attrs, renderer)
             
-            # Add labels for each field
             labels = [_('Years'), _('Months'), _('Weeks'), _('Days')]
             label_html = f'<label style="display: block; margin-bottom: 5px; font-weight: bold;">{labels[i]}:</label>'
             

@@ -13,7 +13,6 @@ class CustomUserForm(forms.ModelForm):
         laboratory = self.cleaned_data.get('laboratory')
         is_superuser = self.cleaned_data.get('is_superuser', False)
         
-        # Only require laboratory for non-superusers
         if not is_superuser and not laboratory:
             raise forms.ValidationError("Laboratório é obrigatório para usuários não-administradores.")
         
@@ -32,7 +31,6 @@ class CustomUserAdmin(UserAdmin):
     )
     list_filter = ("is_staff", "is_superuser", "is_active", "laboratory")
 
-    # Adds laboratory to user change view in General tab
     fieldsets = (
         (None, {"fields": ("username", "password")}),
         (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
@@ -52,7 +50,6 @@ class CustomUserAdmin(UserAdmin):
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
 
-    # Adds laboratory to user creation form in General tab
     add_fieldsets = (
         (
             None,
@@ -66,7 +63,6 @@ class CustomUserAdmin(UserAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         
-        # Make laboratory field required for non-superusers
         if not obj or not obj.is_superuser:
             form.base_fields['laboratory'].required = True
         else:
