@@ -19,17 +19,21 @@ class LaboratoryRecordAdmin(admin.ModelAdmin):
 
 @admin.register(Asset)
 class AssetRecordAdmin(admin.ModelAdmin):
-    list_display = ('kind', 'brand', 'model')
+    list_display = ('kind', 'brand', 'model', 'description')
     list_filter = ('kind', 'brand', 'model')
-    search_fields = ('kind', 'brand', 'model')
+    search_fields = ('kind', 'brand', 'model', 'description')
 
 @admin.register(Equipment)
 class EquipmentRecordAdmin(admin.ModelAdmin):
-    list_display = ('serial_number', 'tag_number', 'status_display', 'bought_at', 'laboratory', 'calibration_periodicity')
-    list_filter = ('bought_at', 'laboratory', 'calibration_periodicity', 'archived')
-    search_fields = ('serial_number', 'tag_number')
-    readonly_fields = ('status_display',)
+    list_display = ('serial_number', 'tag_number', 'inventory_number', 'status_display', 'bought_at', 'laboratory', 'calibration_periodicity', 'full_description')
+    list_filter = ('bought_at', 'laboratory', 'inventory_number', 'calibration_periodicity', 'archived', )
+    search_fields = ('serial_number', 'inventory_number', 'tag_number', 'full_description',)
+    readonly_fields = ('status_display', 'full_description',)
     actions = ['show_expiring_calibration']
+
+    def full_description(self, obj):
+        return obj.full_description
+    full_description.short_description = _("Descrição completa")
 
     def get_urls(self):
         urls = super().get_urls()
@@ -123,12 +127,12 @@ class EquipmentRecordAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             # For admin users, show laboratory field
             return (
-                (None, {'fields': ('status_display', 'serial_number', 'tag_number', 'bought_at', 'laboratory', 'maintenance_periodicity', 'calibration_periodicity', 'archived', 'asset')}),
+                (None, {'fields': ('asset', 'status_display', 'serial_number', 'tag_number', 'inventory_number', 'bought_at', 'laboratory', 'maintenance_periodicity', 'calibration_periodicity', 'archived', 'full_description', 'description')}),
             )
         else:
             # For non-admin users, hide laboratory field
             return (
-                (None, {'fields': ('status_display', 'serial_number', 'tag_number', 'bought_at', 'maintenance_periodicity', 'calibration_periodicity', 'archived', 'asset')}),
+                (None, {'fields': ('asset', 'status_display', 'serial_number', 'tag_number', 'inventory_number', 'bought_at', 'maintenance_periodicity', 'calibration_periodicity', 'archived', 'full_description', 'description')}),
             )
 
     def save_model(self, request, obj, form, change):
