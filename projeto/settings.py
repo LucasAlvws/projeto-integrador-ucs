@@ -120,3 +120,38 @@ LOGOUT_REDIRECT_URL = '/accounts/login/'
 DATE_FORMAT = "%d/%m/%Y"
 
 AUTH_USER_MODEL = "core.CustomUser"
+
+JAZZMIN_SETTINGS = {
+
+    # "hide_apps": ["core"],  # Esconde o app "core" do menu lateral
+
+    "icons": {
+        "core.CustomUser": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "equipment.Equipment": "fas fa-microscope",
+        "equipment.Event": "fas fa-calendar-check",
+        "equipment.Laboratory": "fas fa-flask",
+        "equipment.Asset": "fas fa-box",
+    },
+
+    "side_menu": [
+        {
+            "label": "Autenticação e Autorização",
+            "icon": "fas fa-user-shield",
+            "models": [
+                "core.CustomUser",
+                "auth.Group",
+            ]
+        },
+        {
+            "label": "Equipamentos",
+            "icon": "fas fa-microscope",
+            "models": [
+                "equipment.Laboratory",
+                "equipment.Equipment",
+                "equipment.Asset",
+                "equipment.Event",
+            ]
+        },
+    ],
+}

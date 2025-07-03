@@ -57,8 +57,9 @@ class EquipmentStatus(models.TextChoices):
 
 class CalibrationStatus(models.TextChoices):
     NOT_CALIBRATED = "not_calibrated", _("Not Calibrated")
-    EXPIRING = "expiring", _("Expiring")
-    OVERDUE = "overdue", _("Overdue")
+    EXPIRES_IN_30_DAYS = "expires_in_30_days", _("Expires in 30 Days")
+    EXPIRES_IN_60_DAYS = "expires_in_60_days", _("Expires in 60 Days")
+    EXPIRED = "expired", _("Expired")
     UP_TO_DATE = "up_to_date", _("Up to Date")
 
 class Laboratory(BaseModel):
@@ -109,6 +110,7 @@ class Equipment(BaseModel):
         to=Asset, verbose_name=_("equipment"), on_delete=models.PROTECT
     )
     description = models.TextField(verbose_name=_("complementary description"), blank=True, default='')
+    calibration_due_date = models.DateTimeField(verbose_name=_("calibration due date"), null=True, blank=True)
 
     def __str__(self):
         return f"{self.serial_number} - {self.tag_number} {self.laboratory}"
@@ -130,11 +132,10 @@ class Equipment(BaseModel):
             return EquipmentStatus.UNAVAILABLE
         
         if latest_event.kind in [EventKind.PREVENTIVE, EventKind.CORRECTIVE]:
-            return EquipmentStatus.UNAVAILABLE
+            if latest_event.requires_recalibration:
+                return EquipmentStatus.UNAVAILABLE
 
-        calibration_due_date = latest_event.returned_at + timedelta(days=self.calibration_periodicity)
-
-        if timezone.now() > calibration_due_date:
+        if timezone.now() > self.calibration_due_date:
             return EquipmentStatus.UNAVAILABLE
         
         return EquipmentStatus.AVAILABLE
@@ -144,18 +145,21 @@ class Equipment(BaseModel):
         Determine equipment calibration status based on calibration events.
         Returns 'not_calibrated', 'due', 'expired', or 'up_to_date'.
         """
-        latest_event = self.events.order_by('-returned_at').filter(kind=EventKind.CALIBRATION).first()
-
-        if not latest_event:
+        if not self.calibration_due_date:
             return CalibrationStatus.NOT_CALIBRATED
 
-        calibration_due_date = latest_event.returned_at + timedelta(days=self.calibration_periodicity)
+        if event := self.events.order_by('-returned_at').first():
+            if event.kind != EventKind.CALIBRATION and event.requires_recalibration:
+                return CalibrationStatus.EXPIRED
 
-        if calibration_due_date < timezone.now():
-            return CalibrationStatus.OVERDUE
+        if self.calibration_due_date < timezone.now():
+            return CalibrationStatus.EXPIRED
 
-        if calibration_due_date - timedelta(days=30) < timezone.now():
-            return CalibrationStatus.EXPIRING
+        if self.calibration_due_date - timedelta(days=30) < timezone.now():
+            return CalibrationStatus.EXPIRES_IN_30_DAYS
+
+        if self.calibration_due_date - timedelta(days=60) < timezone.now():
+            return CalibrationStatus.EXPIRES_IN_60_DAYS
 
         return CalibrationStatus.UP_TO_DATE
 
@@ -210,13 +214,13 @@ class Event(BaseModel):
     returned_at = models.DateTimeField(
         verbose_name=_("returned at"), null=True, blank=True
     )
-    due_at = models.DateTimeField(verbose_name=_("due at"))
     price = models.DecimalField(verbose_name=_("price"), max_digits=10, decimal_places=2, blank=True, null=True)
     certificate_number = models.CharField(
         verbose_name=_("calibration certificate"), max_length=50
     )
     certificate_results = models.TextField(verbose_name=_("calibration ranges and points"))
     observation = models.TextField(verbose_name=_("observation"))
+    requires_recalibration = models.BooleanField(verbose_name=_("requires recalibration"), default=False)
 
     def delete(self, *args, **kwargs):
         raise PermissionDenied(_("You don't have permission to delete this object."))
@@ -227,15 +231,3 @@ class Event(BaseModel):
     class Meta:
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
-
-
-class ExpiringEquipment(Equipment):
-    """Proxy model for equipment with expiring calibration"""
-    
-    objects = Equipment.objects
-    
-    class Meta:
-        proxy = True
-        verbose_name = _("Expiring Equipment")
-        verbose_name_plural = _("Expiring Equipment")
-        app_label = 'equipment'

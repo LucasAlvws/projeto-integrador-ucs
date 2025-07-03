@@ -1,0 +1,13 @@
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+{{ block.super }}
+
+<div class="w-100 d-flex justify-content-end">
+  <div class="card mt-4">
+    <div class="card-body">
+      <strong>Total de preços:</strong> R$ {{ total_price|floatformat:2 }}
+    </div>
+  </div>
+</div>
+{% endblock %}

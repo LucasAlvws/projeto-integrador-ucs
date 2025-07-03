@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-03 14:31-0300\n"
+"POT-Creation-Date: 2025-07-03 15:14-0300\n"
 "PO-Revision-Date: 2025-01-27 14:30+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Portuguese (Brazil) <pt-br@li.org>\n"
@@ -33,7 +33,7 @@ msgstr "Permissões"
 msgid "Important dates"
 msgstr "Data importantes"
 
-#: projeto/core/models.py:21 projeto/equipment/models.py:99
+#: projeto/core/models.py:21 projeto/equipment/models.py:100
 msgid "laboratory"
 msgstr "laboratório"
 
@@ -53,27 +53,23 @@ msgstr "Semanas"
 msgid "Days"
 msgstr "Dias"
 
-#: projeto/equipment/admin.py:34
+#: projeto/equipment/admin.py:64
 msgid "Full description"
 msgstr "Descrição completa"
 
-#: projeto/equipment/admin.py:94
-msgid "Expiring Equipments"
-msgstr "Equipamentos Expirando"
-
-#: projeto/equipment/admin.py:141 projeto/equipment/admin.py:271
+#: projeto/equipment/admin.py:142 projeto/equipment/admin.py:303
 msgid "Status"
 msgstr "Status"
 
-#: projeto/equipment/admin.py:157
+#: projeto/equipment/admin.py:162
 msgid "Calibration Status"
 msgstr "Status de Calibração"
 
-#: projeto/equipment/admin.py:191
+#: projeto/equipment/admin.py:201
 msgid "Show equipment with expiring calibration"
 msgstr "Mostrar equipamentos com calibração expirando"
 
-#: projeto/equipment/admin.py:259
+#: projeto/equipment/admin.py:290
 msgid "Days Until Expiry"
 msgstr "Dias Até Expiração"
 
@@ -238,145 +234,158 @@ msgid "Not Calibrated"
 msgstr "Não Calibrado"
 
 #: projeto/equipment/models.py:60
-msgid "Expiring"
-msgstr "Expirando"
+msgid "Expires in 30 Days"
+msgstr "Expira em 30 Dias"
 
 #: projeto/equipment/models.py:61
-msgid "Overdue"
-msgstr "Vencido"
+msgid "Expires in 60 Days"
+msgstr "Expira em 60 Dias"
 
 #: projeto/equipment/models.py:62
+msgid "Expired"
+msgstr "Vencido"
+
+#: projeto/equipment/models.py:63
 msgid "Up to Date"
 msgstr "Em Dia"
 
-#: projeto/equipment/models.py:65
+#: projeto/equipment/models.py:66
 msgid "name"
 msgstr "nome"
 
-#: projeto/equipment/models.py:71
+#: projeto/equipment/models.py:72
 msgid "Laboratory"
 msgstr "Laboratório"
 
-#: projeto/equipment/models.py:72
+#: projeto/equipment/models.py:73
 msgid "Laboratories"
 msgstr "Laboratórios"
 
-#: projeto/equipment/models.py:76
+#: projeto/equipment/models.py:77
 msgid "brand"
 msgstr "marca"
 
-#: projeto/equipment/models.py:77
+#: projeto/equipment/models.py:78
 msgid "model"
 msgstr "modelo"
 
-#: projeto/equipment/models.py:78
+#: projeto/equipment/models.py:79
 msgid "category"
 msgstr "categoria"
 
-#: projeto/equipment/models.py:80 projeto/equipment/models.py:207
+#: projeto/equipment/models.py:81 projeto/equipment/models.py:206
 msgid "type"
 msgstr "tipo"
 
-#: projeto/equipment/models.py:82
+#: projeto/equipment/models.py:83
 msgid "description"
 msgstr "descrição"
 
-#: projeto/equipment/models.py:88
+#: projeto/equipment/models.py:89
 msgid "Item"
 msgstr "Item"
 
-#: projeto/equipment/models.py:89
+#: projeto/equipment/models.py:90
 msgid "Items"
 msgstr "Itens"
 
-#: projeto/equipment/models.py:93
+#: projeto/equipment/models.py:94
 msgid "serial number"
 msgstr "número de série"
 
-#: projeto/equipment/models.py:94
+#: projeto/equipment/models.py:95
 msgid "tag number"
 msgstr "número da tag"
 
-#: projeto/equipment/models.py:95
+#: projeto/equipment/models.py:96
 msgid "inventory number"
 msgstr "número de patrimônio"
 
-#: projeto/equipment/models.py:97
+#: projeto/equipment/models.py:98
 msgid "bought at"
 msgstr "comprado em"
 
-#: projeto/equipment/models.py:102
+#: projeto/equipment/models.py:103
 msgid "maintenance periodicity"
 msgstr "periodicidade de manutenção"
 
-#: projeto/equipment/models.py:105
+#: projeto/equipment/models.py:106
 msgid "calibration periodicity"
 msgstr "periodicidade de calibração"
 
-#: projeto/equipment/models.py:107
+#: projeto/equipment/models.py:108
 msgid "archived"
 msgstr "arquivado"
 
-#: projeto/equipment/models.py:109
+#: projeto/equipment/models.py:110
 msgid "equipment"
 msgstr "equipamento"
 
-#: projeto/equipment/models.py:111
+#: projeto/equipment/models.py:112
 msgid "complementary description"
 msgstr "descrição complementar"
 
-#: projeto/equipment/models.py:195
+#: projeto/equipment/models.py:113
+msgid "calibration due date"
+msgstr "data de vencimento da calibração"
+
+#: projeto/equipment/models.py:194
 msgid "Equipment"
 msgstr "Equipamento"
 
-#: projeto/equipment/models.py:196
+#: projeto/equipment/models.py:195
 msgid "Equipments"
 msgstr "Equipamentos"
 
-#: projeto/equipment/models.py:202
+#: projeto/equipment/models.py:201
 msgid "item"
 msgstr "item"
 
-#: projeto/equipment/models.py:209
+#: projeto/equipment/models.py:208
 msgid "sent at"
 msgstr "enviado em"
 
-#: projeto/equipment/models.py:211
+#: projeto/equipment/models.py:210
 msgid "returned at"
 msgstr "retornado em"
 
-#: projeto/equipment/models.py:213
-msgid "due at"
-msgstr "vence em"
-
-#: projeto/equipment/models.py:214
+#: projeto/equipment/models.py:212
 msgid "price"
 msgstr "preço"
 
-#: projeto/equipment/models.py:216
+#: projeto/equipment/models.py:214
 msgid "calibration certificate"
 msgstr "certificado de calibração"
 
-#: projeto/equipment/models.py:218
+#: projeto/equipment/models.py:216
 msgid "calibration ranges and points"
 msgstr "faixas e pontos de calibração"
 
-#: projeto/equipment/models.py:219
+#: projeto/equipment/models.py:217
 msgid "observation"
 msgstr "observação"
 
-#: projeto/equipment/models.py:222
+#: projeto/equipment/models.py:220
 msgid "You don't have permission to delete this object."
 msgstr "Você não tem permissão para excluir este objeto."
 
-#: projeto/equipment/models.py:228
+#: projeto/equipment/models.py:226
 msgid "Event"
 msgstr "Evento"
 
-#: projeto/equipment/models.py:229
+#: projeto/equipment/models.py:227
 msgid "Events"
 msgstr "Eventos"
 
-#: projeto/equipment/models.py:239 projeto/equipment/models.py:240
+#: projeto/equipment/models.py:237 projeto/equipment/models.py:238
 msgid "Expiring Equipment"
 msgstr "Equipamento Expirando"
+
+#~ msgid "Expiring Equipments"
+#~ msgstr "Equipamentos Expirando"
+
+#~ msgid "Expiring"
+#~ msgstr "Expirando"
+
+#~ msgid "due at"
+#~ msgstr "vence em"

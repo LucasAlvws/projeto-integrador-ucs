@@ -82,13 +82,13 @@ class EventAdminTest(TestCase):
     def test_list_display(self):
         self.assertEqual(
             self.model_admin.list_display,
-            ('kind', 'item', 'send_at', 'returned_at', 'due_at', 'price', 'certificate_number')
+            ('kind', 'item', 'send_at', 'returned_at', 'price', 'certificate_number')
         )
 
     def test_list_filter(self):
         self.assertEqual(
             self.model_admin.list_filter,
-            ('kind', 'send_at', 'returned_at', 'due_at')
+            ('kind', 'send_at', 'returned_at')
         )
 
     def test_search_fields(self):

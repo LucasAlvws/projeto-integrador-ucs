@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django import forms
+from django.shortcuts import redirect
+from django.urls import reverse
 from .models import CustomUser
 from django.utils.translation import gettext_lazy as _
 
@@ -69,3 +71,14 @@ class CustomUserAdmin(UserAdmin):
             form.base_fields['laboratory'].required = False
             
         return form
+
+
+_original_index = admin.site.index
+
+def custom_index(self, request, extra_context=None):
+    if request.path == reverse('admin:index'):
+        return redirect(reverse('admin:equipment_equipment_changelist'))  # ajuste aqui
+    return _original_index(request, extra_context)
+
+
+admin.site.index = custom_index.__get__(admin.site, type(admin.site))
