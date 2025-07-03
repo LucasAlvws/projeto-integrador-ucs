@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 19:49-0300\n"
+"POT-Creation-Date: 2025-07-03 14:31-0300\n"
 "PO-Revision-Date: 2025-01-27 14:30+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Portuguese (Brazil) <pt-br@li.org>\n"
@@ -17,59 +17,63 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: projeto/core/admin.py:38
+#: projeto/core/admin.py:36
 msgid "Personal info"
 msgstr "Informações pessoais"
 
-#: projeto/core/admin.py:39
+#: projeto/core/admin.py:37
 msgid "General"
 msgstr "Geral"
 
-#: projeto/core/admin.py:41
+#: projeto/core/admin.py:39
 msgid "Permissions"
 msgstr "Permissões"
 
-#: projeto/core/admin.py:52
+#: projeto/core/admin.py:50
 msgid "Important dates"
 msgstr "Data importantes"
 
-#: projeto/core/models.py:21 projeto/equipment/models.py:61
+#: projeto/core/models.py:21 projeto/equipment/models.py:99
 msgid "laboratory"
 msgstr "laboratório"
 
-#: projeto/core/widgets.py:8 projeto/core/widgets.py:63
+#: projeto/core/widgets.py:8 projeto/core/widgets.py:59
 msgid "Years"
 msgstr "Anos"
 
-#: projeto/core/widgets.py:9 projeto/core/widgets.py:63
+#: projeto/core/widgets.py:9 projeto/core/widgets.py:59
 msgid "Months"
 msgstr "Meses"
 
-#: projeto/core/widgets.py:10 projeto/core/widgets.py:63
+#: projeto/core/widgets.py:10 projeto/core/widgets.py:59
 msgid "Weeks"
 msgstr "Semanas"
 
-#: projeto/core/widgets.py:11 projeto/core/widgets.py:63
+#: projeto/core/widgets.py:11 projeto/core/widgets.py:59
 msgid "Days"
 msgstr "Dias"
 
-#: projeto/equipment/admin.py:36
+#: projeto/equipment/admin.py:34
 msgid "Full description"
 msgstr "Descrição completa"
 
-#: projeto/equipment/admin.py:103
+#: projeto/equipment/admin.py:94
 msgid "Expiring Equipments"
 msgstr "Equipamentos Expirando"
 
-#: projeto/equipment/admin.py:156 projeto/equipment/admin.py:293
+#: projeto/equipment/admin.py:141 projeto/equipment/admin.py:271
 msgid "Status"
 msgstr "Status"
 
-#: projeto/equipment/admin.py:197
+#: projeto/equipment/admin.py:157
+msgid "Calibration Status"
+msgstr "Status de Calibração"
+
+#: projeto/equipment/admin.py:191
 msgid "Show equipment with expiring calibration"
 msgstr "Mostrar equipamentos com calibração expirando"
 
-#: projeto/equipment/admin.py:281
+#: projeto/equipment/admin.py:259
 msgid "Days Until Expiry"
 msgstr "Dias Até Expiração"
 
@@ -81,154 +85,298 @@ msgstr "Analógico"
 msgid "Digital"
 msgstr "Digital"
 
+#: projeto/equipment/models.py:14
+msgid "Furnace"
+msgstr "Forno"
+
 #: projeto/equipment/models.py:15
+msgid "Glassware"
+msgstr "Vidraria"
+
+#: projeto/equipment/models.py:16
+msgid "Balance"
+msgstr "Balança"
+
+#: projeto/equipment/models.py:17
+msgid "Computer"
+msgstr "Computador"
+
+#: projeto/equipment/models.py:18
+msgid "Microscope"
+msgstr "Microscópio"
+
+#: projeto/equipment/models.py:19
+msgid "Centrifuge"
+msgstr "Centrífuga"
+
+#: projeto/equipment/models.py:20
+msgid "Incubator"
+msgstr "Incubadora"
+
+#: projeto/equipment/models.py:21
+msgid "Spectrophotometer"
+msgstr "Espectrofotômetro"
+
+#: projeto/equipment/models.py:22
+msgid "pH Meter"
+msgstr "Medidor de pH"
+
+#: projeto/equipment/models.py:23
+msgid "Freezer"
+msgstr "Freezer"
+
+#: projeto/equipment/models.py:24
+msgid "Refrigerator"
+msgstr "Refrigerador"
+
+#: projeto/equipment/models.py:25
+msgid "Autoclave"
+msgstr "Autoclave"
+
+#: projeto/equipment/models.py:26
+msgid "Pipette"
+msgstr "Pipeta"
+
+#: projeto/equipment/models.py:27
+msgid "Hood"
+msgstr "Capela"
+
+#: projeto/equipment/models.py:28
+msgid "Thermometer"
+msgstr "Termômetro"
+
+#: projeto/equipment/models.py:29
+msgid "Analyzer"
+msgstr "Analisador"
+
+#: projeto/equipment/models.py:30
+msgid "Dispenser"
+msgstr "Dosador"
+
+#: projeto/equipment/models.py:31
+msgid "Heating Plate"
+msgstr "Placa Aquecedora"
+
+#: projeto/equipment/models.py:32
+msgid "Desiccator"
+msgstr "Dessecador"
+
+#: projeto/equipment/models.py:33
+msgid "Timer"
+msgstr "Temporizador"
+
+#: projeto/equipment/models.py:34
+msgid "Vacuum Pump"
+msgstr "Bomba de Vácuo"
+
+#: projeto/equipment/models.py:35
+msgid "Power Supply"
+msgstr "Fonte de Alimentação"
+
+#: projeto/equipment/models.py:36
+msgid "Multimeter"
+msgstr "Multímetro"
+
+#: projeto/equipment/models.py:37
+msgid "Waste Container"
+msgstr "Recipiente para Resíduos"
+
+#: projeto/equipment/models.py:38
+msgid "Titrator"
+msgstr "Titulador"
+
+#: projeto/equipment/models.py:39
+msgid "Conductivity Meter"
+msgstr "Medidor de Condutividade"
+
+#: projeto/equipment/models.py:40
+msgid "Oven"
+msgstr "Estufa"
+
+#: projeto/equipment/models.py:41
+msgid "Microplate Reader"
+msgstr "Leitor de Microplacas"
+
+#: projeto/equipment/models.py:42
+msgid "Water Purification System"
+msgstr "Sistema de Purificação de Água"
+
+#: projeto/equipment/models.py:43
+msgid "Other"
+msgstr "Outro"
+
+#: projeto/equipment/models.py:47
 msgid "Preventive Maintenance"
 msgstr "Manutenção Preventiva"
 
-#: projeto/equipment/models.py:16
+#: projeto/equipment/models.py:48
 msgid "Corrective Maintenance"
 msgstr "Manutenção Corretiva"
 
-#: projeto/equipment/models.py:17
+#: projeto/equipment/models.py:49
 msgid "Calibration"
 msgstr "Calibração"
 
-#: projeto/equipment/models.py:18
+#: projeto/equipment/models.py:50
 msgid "Qualification"
 msgstr "Qualificação"
 
-#: projeto/equipment/models.py:19
+#: projeto/equipment/models.py:51
 msgid "Check"
 msgstr "Checagem"
 
-#: projeto/equipment/models.py:23
+#: projeto/equipment/models.py:55
 msgid "Available"
 msgstr "Disponível"
 
-#: projeto/equipment/models.py:24
+#: projeto/equipment/models.py:56
 msgid "Unavailable"
 msgstr "Indisponível"
 
-#: projeto/equipment/models.py:28
+#: projeto/equipment/models.py:59
+msgid "Not Calibrated"
+msgstr "Não Calibrado"
+
+#: projeto/equipment/models.py:60
+msgid "Expiring"
+msgstr "Expirando"
+
+#: projeto/equipment/models.py:61
+msgid "Overdue"
+msgstr "Vencido"
+
+#: projeto/equipment/models.py:62
+msgid "Up to Date"
+msgstr "Em Dia"
+
+#: projeto/equipment/models.py:65
 msgid "name"
 msgstr "nome"
 
-#: projeto/equipment/models.py:34
+#: projeto/equipment/models.py:71
 msgid "Laboratory"
 msgstr "Laboratório"
 
-#: projeto/equipment/models.py:35
+#: projeto/equipment/models.py:72
 msgid "Laboratories"
 msgstr "Laboratórios"
 
-#: projeto/equipment/models.py:39
+#: projeto/equipment/models.py:76
 msgid "brand"
 msgstr "marca"
 
-#: projeto/equipment/models.py:40
+#: projeto/equipment/models.py:77
 msgid "model"
 msgstr "modelo"
 
-#: projeto/equipment/models.py:42 projeto/equipment/models.py:140
+#: projeto/equipment/models.py:78
+msgid "category"
+msgstr "categoria"
+
+#: projeto/equipment/models.py:80 projeto/equipment/models.py:207
 msgid "type"
 msgstr "tipo"
 
-#: projeto/equipment/models.py:44
+#: projeto/equipment/models.py:82
 msgid "description"
 msgstr "descrição"
 
-#: projeto/equipment/models.py:50
+#: projeto/equipment/models.py:88
 msgid "Item"
 msgstr "Item"
 
-#: projeto/equipment/models.py:51
+#: projeto/equipment/models.py:89
 msgid "Items"
 msgstr "Itens"
 
-#: projeto/equipment/models.py:55
+#: projeto/equipment/models.py:93
 msgid "serial number"
 msgstr "número de série"
 
-#: projeto/equipment/models.py:56
+#: projeto/equipment/models.py:94
 msgid "tag number"
 msgstr "número da tag"
 
-#: projeto/equipment/models.py:57
+#: projeto/equipment/models.py:95
 msgid "inventory number"
 msgstr "número de patrimônio"
 
-#: projeto/equipment/models.py:59
+#: projeto/equipment/models.py:97
 msgid "bought at"
 msgstr "comprado em"
 
-#: projeto/equipment/models.py:64
+#: projeto/equipment/models.py:102
 msgid "maintenance periodicity"
 msgstr "periodicidade de manutenção"
 
-#: projeto/equipment/models.py:67
+#: projeto/equipment/models.py:105
 msgid "calibration periodicity"
 msgstr "periodicidade de calibração"
 
-#: projeto/equipment/models.py:69
+#: projeto/equipment/models.py:107
 msgid "archived"
 msgstr "arquivado"
 
-#: projeto/equipment/models.py:71
+#: projeto/equipment/models.py:109
 msgid "equipment"
 msgstr "equipamento"
 
-#: projeto/equipment/models.py:73
+#: projeto/equipment/models.py:111
 msgid "complementary description"
 msgstr "descrição complementar"
 
-#: projeto/equipment/models.py:134 projeto/equipment/models.py:135
+#: projeto/equipment/models.py:195
 msgid "Equipment"
 msgstr "Equipamento"
 
-#: projeto/equipment/models.py:142
-msgid "sent at"
-msgstr "enviado em"
+#: projeto/equipment/models.py:196
+msgid "Equipments"
+msgstr "Equipamentos"
 
-#: projeto/equipment/models.py:144
-msgid "returned at"
-msgstr "retornado em"
-
-#: projeto/equipment/models.py:146
-msgid "due at"
-msgstr "vence em"
-
-#: projeto/equipment/models.py:147
-msgid "price"
-msgstr "preço"
-
-#: projeto/equipment/models.py:149
-msgid "calibration certificate"
-msgstr "certificado de calibração"
-
-#: projeto/equipment/models.py:151
-msgid "calibration ranges and points"
-msgstr "faixas e pontos de calibração"
-
-#: projeto/equipment/models.py:152
-msgid "observation"
-msgstr "observação"
-
-#: projeto/equipment/models.py:156
+#: projeto/equipment/models.py:202
 msgid "item"
 msgstr "item"
 
-#: projeto/equipment/models.py:162
+#: projeto/equipment/models.py:209
+msgid "sent at"
+msgstr "enviado em"
+
+#: projeto/equipment/models.py:211
+msgid "returned at"
+msgstr "retornado em"
+
+#: projeto/equipment/models.py:213
+msgid "due at"
+msgstr "vence em"
+
+#: projeto/equipment/models.py:214
+msgid "price"
+msgstr "preço"
+
+#: projeto/equipment/models.py:216
+msgid "calibration certificate"
+msgstr "certificado de calibração"
+
+#: projeto/equipment/models.py:218
+msgid "calibration ranges and points"
+msgstr "faixas e pontos de calibração"
+
+#: projeto/equipment/models.py:219
+msgid "observation"
+msgstr "observação"
+
+#: projeto/equipment/models.py:222
 msgid "You don't have permission to delete this object."
 msgstr "Você não tem permissão para excluir este objeto."
 
-#: projeto/equipment/models.py:168
+#: projeto/equipment/models.py:228
 msgid "Event"
 msgstr "Evento"
 
-#: projeto/equipment/models.py:169
+#: projeto/equipment/models.py:229
 msgid "Events"
 msgstr "Eventos"
 
-#: projeto/equipment/models.py:179 projeto/equipment/models.py:180
+#: projeto/equipment/models.py:239 projeto/equipment/models.py:240
 msgid "Expiring Equipment"
 msgstr "Equipamento Expirando"

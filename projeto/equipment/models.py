@@ -10,6 +10,38 @@ class AssetKind(models.TextChoices):
     ANALOG = "analog", _("Analog")
     DIGITAL = "digital", _("Digital")
 
+class AssetCategory(models.TextChoices):
+    FURNACE = "furnace", _("Furnace")  # fornalha  
+    GLASSWARE = "glassware", _("Glassware")  # vidraria  
+    BALANCE = "balance", _("Balance")  # balança  
+    COMPUTER = "computer", _("Computer")  # computador  
+    MICROSCOPE = "microscope", _("Microscope")  # microscópio  
+    CENTRIFUGE = "centrifuge", _("Centrifuge")  # centrífuga  
+    INCUBATOR = "incubator", _("Incubator")  # incubadora  
+    SPECTROPHOTOMETER = "spectrophotometer", _("Spectrophotometer")  # espectrofotômetro  
+    PH_METER = "ph_meter", _("pH Meter")  # medidor de pH  
+    FREEZER = "freezer", _("Freezer")  # freezer  
+    REFRIGERATOR = "refrigerator", _("Refrigerator")  # geladeira  
+    AUTOCLAVE = "autoclave", _("Autoclave")  # autoclave  
+    PIPETTE = "pipette", _("Pipette")  # pipeta  
+    HOOD = "hood", _("Hood")  # capela  
+    THERMOMETER = "thermometer", _("Thermometer")  # termômetro  
+    ANALYZER = "analyzer", _("Analyzer")  # analisador  
+    DISPENSER = "dispenser", _("Dispenser")  # dispensador  
+    HEATING_PLATE = "heating_plate", _("Heating Plate")  # placa de aquecimento  
+    DESICCATOR = "desiccator", _("Desiccator")  # dessecador  
+    TIMER = "timer", _("Timer")  # cronômetro  
+    VACUUM_PUMP = "vacuum_pump", _("Vacuum Pump")  # bomba de vácuo  
+    POWER_SUPPLY = "power_supply", _("Power Supply")  # fonte de alimentação  
+    MULTIMETER = "multimeter", _("Multimeter")  # multímetro  
+    WASTE_CONTAINER = "waste_container", _("Waste Container")  # recipiente de resíduos  
+    TITRATOR = "titrator", _("Titrator")  # titulador  
+    CONDUCTIVITY_METER = "conductivity_meter", _("Conductivity Meter")  # medidor de condutividade  
+    OVEN = "oven", _("Oven")  # estufa de secagem  
+    MICROPLATE_READER = "microplate_reader", _("Microplate Reader")  # leitor de placas  
+    WATER_PURIFICATION_SYSTEM = "water_purification_system", _("Water Purification System")  # sistema de purificação de água 
+    OTHER = "other", _("Other")  # outro  
+
 
 class EventKind(models.TextChoices):
     PREVENTIVE = "preventive_maintenance", _("Preventive Maintenance")
@@ -23,6 +55,11 @@ class EquipmentStatus(models.TextChoices):
     AVAILABLE = "available", _("Available")
     UNAVAILABLE = "unavailable", _("Unavailable")
 
+class CalibrationStatus(models.TextChoices):
+    NOT_CALIBRATED = "not_calibrated", _("Not Calibrated")
+    EXPIRING = "expiring", _("Expiring")
+    OVERDUE = "overdue", _("Overdue")
+    UP_TO_DATE = "up_to_date", _("Up to Date")
 
 class Laboratory(BaseModel):
     name = models.CharField(verbose_name=_("name"), max_length=100, unique=True)
@@ -38,6 +75,7 @@ class Laboratory(BaseModel):
 class Asset(BaseModel):
     brand = models.CharField(verbose_name=_("brand"), max_length=50)
     model = models.CharField(verbose_name=_("model"), max_length=50)
+    category = models.CharField(verbose_name=_("category"), max_length=50, choices=AssetCategory.choices)
     kind = models.CharField(
         verbose_name=_("type"), max_length=50, choices=AssetKind.choices
     )
@@ -101,6 +139,26 @@ class Equipment(BaseModel):
         
         return EquipmentStatus.AVAILABLE
 
+    def get_calibration_status(self):
+        """
+        Determine equipment calibration status based on calibration events.
+        Returns 'not_calibrated', 'due', 'expired', or 'up_to_date'.
+        """
+        latest_event = self.events.order_by('-returned_at').filter(kind=EventKind.CALIBRATION).first()
+
+        if not latest_event:
+            return CalibrationStatus.NOT_CALIBRATED
+
+        calibration_due_date = latest_event.returned_at + timedelta(days=self.calibration_periodicity)
+
+        if calibration_due_date < timezone.now():
+            return CalibrationStatus.OVERDUE
+
+        if calibration_due_date - timedelta(days=30) < timezone.now():
+            return CalibrationStatus.EXPIRING
+
+        return CalibrationStatus.UP_TO_DATE
+
     @property
     def full_description(self):
         """
@@ -123,12 +181,28 @@ class Equipment(BaseModel):
         """Property to get the human-readable status"""
         return dict(EquipmentStatus.choices)[self.get_status()]
 
+    @property
+    def calibration_status(self):
+        """Property to get the current calibration status"""
+        return self.get_calibration_status()
+
+    @property
+    def calibration_status_display(self):
+        """Property to get the human-readable calibration status"""
+        return dict(CalibrationStatus.choices)[self.get_calibration_status()]
+
     class Meta:
         verbose_name = _("Equipment")
-        verbose_name_plural = _("Equipment")
+        verbose_name_plural = _("Equipments")
 
 
 class Event(BaseModel):
+    item = models.ForeignKey(
+        Equipment, 
+        verbose_name=_("item"), 
+        on_delete=models.PROTECT,
+        related_name='events'
+    )
     kind = models.CharField(
         verbose_name=_("type"), max_length=50, choices=EventKind.choices
     )
@@ -143,13 +217,6 @@ class Event(BaseModel):
     )
     certificate_results = models.TextField(verbose_name=_("calibration ranges and points"))
     observation = models.TextField(verbose_name=_("observation"))
-
-    item = models.ForeignKey(
-        Equipment, 
-        verbose_name=_("item"), 
-        on_delete=models.PROTECT,
-        related_name='events'
-    )
 
     def delete(self, *args, **kwargs):
         raise PermissionDenied(_("You don't have permission to delete this object."))

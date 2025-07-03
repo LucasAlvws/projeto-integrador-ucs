@@ -17,14 +17,14 @@ class LaboratoryRecordAdmin(admin.ModelAdmin):
 
 @admin.register(Asset)
 class AssetRecordAdmin(admin.ModelAdmin):
-    list_display = ('kind', 'brand', 'model', 'description')
-    list_filter = ('kind', 'brand', 'model')
-    search_fields = ('kind', 'brand', 'model', 'description')
+    list_display = ('uuid', 'category', 'kind', 'brand', 'model', 'description')
+    list_filter = ('category', 'kind', 'brand', 'model')
+    search_fields = ('category', 'kind', 'brand', 'model', 'description')
 
 @admin.register(Equipment)
 class EquipmentRecordAdmin(admin.ModelAdmin):
-    list_display = ('serial_number', 'tag_number', 'inventory_number', 'status_display', 'bought_at', 'laboratory', 'calibration_periodicity', 'full_description')
-    list_filter = ('bought_at', 'laboratory', 'inventory_number', 'calibration_periodicity', 'archived', )
+    list_display = ('serial_number', 'tag_number', 'inventory_number', 'status_display', 'calibration_status', 'laboratory', 'full_description', 'bought_at',)
+    list_filter = ('asset__category', 'asset__kind', 'asset__brand', 'asset__model',)
     search_fields = ('serial_number', 'inventory_number', 'tag_number', 'full_description',)
     readonly_fields = ('status_display', 'full_description',)
     actions = ['show_expiring_calibration']
@@ -73,7 +73,7 @@ class EquipmentRecordAdmin(admin.ModelAdmin):
                 if today <= expiry_date <= next_month:
                     expiring_equipment_ids.append(equipment.id)
                 
-        filtered_qs = equipment_qs.filter(id__in=expiring_equipment_ids)
+        filtered_qs = equipment_qs.filter(uuid__in=expiring_equipment_ids)
         
         import copy
         temp_request = copy.copy(request)
@@ -139,6 +139,22 @@ class EquipmentRecordAdmin(admin.ModelAdmin):
         else:
             return format_html('<span style="color: green;">{}</span>', status)
     status_display.short_description = _("Status")
+
+    def calibration_status(self, obj):
+        """Display calibration status with custom label and icon"""
+        from django.utils.html import format_html
+        from .models import CalibrationStatus
+        
+        status = obj.calibration_status_display
+        if obj.calibration_status == CalibrationStatus.UP_TO_DATE:
+            return format_html('<span class="bg-green text-white">{}</span>', status)
+        if obj.calibration_status == CalibrationStatus.EXPIRING:
+            return format_html('<span class="bg-yellow text-white">{}</span>', status)
+        if obj.calibration_status == CalibrationStatus.OVERDUE:
+            return format_html('<span class="bg-red text-white">{}</span>', status)
+        if obj.calibration_status == CalibrationStatus.NOT_CALIBRATED:
+            return format_html('<span class="bg-red text-white">{}</span>', status)
+    calibration_status.short_description = _("Calibration Status")
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
@@ -225,7 +241,7 @@ class ExpiringEquipmentAdmin(admin.ModelAdmin):
                 if today <= expiry_date <= next_month:
                     expiring_equipment_ids.append(equipment.id)
         
-        return equipment_qs.filter(id__in=expiring_equipment_ids)
+        return equipment_qs.filter(uuid__in=expiring_equipment_ids)
 
     def days_until_expiry(self, obj):
         """Calculate days until calibration expires"""
